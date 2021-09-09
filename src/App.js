@@ -1,16 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from './components/header';
+import Layout from './components/layout';
+import Footer from './components/footer';
 
-function App() {
+import bg1 from './assets/bg3.jpeg';
+import bg2 from './assets/bg1.jpeg';
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Hello^ Humans!
-        </p>
-      </header>
-    </div>
+    <>
+      <Header 
+        title="This is title"
+        descr="This is Description!"
+      />
+      <Layout 
+        title="This is title"
+        descr="This is Description!"
+        urlBg={ bg1 }
+      />
+       <Layout 
+        title="This is title"
+        descr="This is Description!"
+        colorBg="tomato"
+      />
+       <Layout 
+        title="This is title"
+        descr="This is Description!"
+        urlBg={ bg2 }
+      />
+       <Footer 
+        title="This is title"
+        descr="This is Description!"
+      />
+    </>
   );
 }
 
