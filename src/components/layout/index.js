@@ -1,9 +1,5 @@
 import s from './style.module.css';
 
-import bg from '../../assets/bg3.jpeg'
-
-console.log(bg)
-
 const Layout = ({title, descr, urlBg, colorBg}) => {
     const layoutStyle = {
         backgroundImage: urlBg && `url("${urlBg}")`,
