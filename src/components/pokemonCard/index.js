@@ -2,13 +2,13 @@ import { useState } from 'react';
 
 import s from './style.module.css';
 
-import cardBack from '../../assets/card-back-side.jpeg';
+import cardBackSide from '../../assets/card-back-side.jpeg';
 
 const PokemonCard = ({name, img, id, type, values}) => {
     const [isActive, setActive] = useState(false);
 
     const onClick = () => {
-        setActive(true);
+        !isActive ? setActive(true) : setActive(false)
     }
 
     return (
@@ -39,7 +39,7 @@ const PokemonCard = ({name, img, id, type, values}) => {
 
         <div className={s.cardBack}>
             <div className={`${s.wrap} ${s.back}`}>
-                <img src={cardBack} alt="Сard Backed" />
+                <img src={cardBackSide} alt="Сard Backed" />
             </div>
         </div>
 
