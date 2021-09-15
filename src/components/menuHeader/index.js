@@ -1,4 +1,3 @@
-// import s from './style.module.css';
 import Menu from '../menu'
 import NavBar from '../navBar'
 import { useState } from "react";
