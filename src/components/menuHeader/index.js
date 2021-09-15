@@ -3,19 +3,20 @@ import Menu from '../menu'
 import NavBar from '../navBar'
 import { useState } from "react";
 
-const MenuHeader = () => {
-    const [isActive, setActive] = useState(false);
-    const onClickBtn = () => {
-        setActive(!isActive);
+const MenuHeader = ({ bgActive }) => {
+    const [isOpened, setOpened] = useState(false);
+    const onClickMenu = () => {
+        setOpened(!isOpened);
     }
     return (
         <>
             <NavBar
-                onClickBtn={onClickBtn}
-                isActive={isActive}
+                onClickMenu={onClickMenu}
+                isOpened={isOpened}
+                bgActive={bgActive}
             />
             <Menu
-                isActive={isActive}
+                isOpened={isOpened}
             />
         </>
     )
