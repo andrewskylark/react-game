@@ -7,7 +7,6 @@ const MenuHeader = () => {
     const [isActive, setActive] = useState(false);
     const onClickBtn = () => {
         setActive(!isActive);
-        console.log(isActive)
     }
     return (
         <>
