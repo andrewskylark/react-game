@@ -11,7 +11,7 @@ const POKEMONS = CARDSDATA.map(pokemon => {
 })
 
 const GamePage = () => {
-    const [pokemons, setPokemons] = useState(POKEMONS).slice(0, 5);
+    const [pokemons, setPokemons] = useState(() => POKEMONS.slice(0, 5));
 
     const onClickPokemon = (id) => {
         setPokemons(prevState =>
@@ -19,7 +19,6 @@ const GamePage = () => {
                 item => item.id === id ?
                 {...item, active: !item.active} :
                 item
-                
             )    
         )
     }
