@@ -8,20 +8,17 @@ import bg2 from '../../assets/bg1.jpeg';
 import bg1 from '../../assets/bg3.jpeg';
 import PokemonCard from '../../components/pokemonCard';
 import CARDSDATA from '../../components/pokemonCard/cardsData.json';
-import MenuHeader from '../../components/menuHeader';
 
 const HomePage = ({ onChangePage }) => {
-  const onClickBtn = (page) => {
-    onChangePage && onChangePage(page);
-  }
+  // const onClickBtn = (page) => {
+  //   onChangePage && onChangePage(page);
+  // }
   return (
     <>
-      <MenuHeader
-      />
       <Header
         title="This is title"
         descr="This is Description!"
-        onClickBtn={onClickBtn}
+        // onClickBtn={onClickBtn}
       />
       <Layout
         title="This is title"

@@ -7,6 +7,9 @@ const MenuHeader = ({ bgActive }) => {
     const onClickMenu = () => {
         setOpened(!isOpened);
     }
+    const onClickLink = () => {
+        setOpened(!isOpened);
+    }
     return (
         <>
             <NavBar
@@ -15,6 +18,7 @@ const MenuHeader = ({ bgActive }) => {
                 bgActive={bgActive}
             />
             <Menu
+                onClickLink={onClickLink}
                 isOpened={isOpened}
             />
         </>

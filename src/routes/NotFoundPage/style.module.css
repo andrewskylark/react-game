@@ -3,6 +3,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    background-image: url("../../assets/bg1.jpeg");
+    justify-content: end;
+    background-image: url("../../assets/bg-404.svg");
+    background-repeat: no-repeat;
+    background-position: center;
 }

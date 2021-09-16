@@ -1,10 +1,10 @@
 import s from './style.module.css';
 import Btn from '../../components/btn'
 
-const AboutPage = () => {
+const ContactsPage = () => {
     return (
         <div className={s.page}>
-            ABOUT PAGE
+            CONTACT PAGE
             <Btn 
                 text="Back to Home Page"
                 route=""
@@ -13,4 +13,4 @@ const AboutPage = () => {
     );
 };
 
-export default AboutPage;
+export default ContactsPage;
