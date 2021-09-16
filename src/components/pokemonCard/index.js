@@ -1,15 +1,14 @@
-import { useState } from 'react';
 import cn from 'classnames';
 
 import s from './style.module.css';
 
 import cardBackSide from '../../assets/card-back-side.jpeg';
 
-const PokemonCard = ({name, img, id, type, values}) => {
-    const [isActive, setActive] = useState(false);
+const PokemonCard = ({name, img, id, type, values, isActive, onClickPokemon}) => {
 
     const onClick = () => {
-        setActive(!isActive);
+        onClickPokemon && onClickPokemon(id);
+        id={id}
     }
 
     return (
