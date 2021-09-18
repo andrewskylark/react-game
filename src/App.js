@@ -1,4 +1,4 @@
-import {useRouteMatch, Route, Switch, Redirect} from "react-router-dom"
+import {useRouteMatch, Route, Switch, Redirect} from "react-router-dom";
 import cn from 'classnames';
 
 import MenuHeader from "./components/menuHeader";

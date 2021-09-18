@@ -1,41 +1,56 @@
 import s from './style.module.css';
 import Btn from '../../components/btn';
 import PokemonCard from '../../components/pokemonCard';
-import CARDSDATA from '../../components/pokemonCard/cardsData.json';
+// import CARDSDATA from '../../components/pokemonCard/cardsData.json';
 
-import { useState } from 'react';
+import {useState, useEffect} from 'react';
 
-const POKEMONS = CARDSDATA.map(pokemon => {
-    Object.assign(pokemon, {'active': false})
-    return pokemon;
-})
+import database from "../../service/firebase.js"
+
+// const POKEMONS = CARDSDATA.map(pokemon => {
+//     Object.assign(pokemon, {'active': false})
+//     return pokemon;
+// })
 
 const GamePage = () => {
-    const [pokemons, setPokemons] = useState(() => POKEMONS.slice(0, 5));
+    const [pokemons, setPokemons] = useState({});
+
+    useEffect(() => {
+        database.ref('pokemons').once('value', (snapshot) => {
+            setPokemons(snapshot.val())
+          });
+    }, []);
 
     const onClickPokemon = (id) => {
-        setPokemons(prevState =>
-            prevState.map(
-                item => item.id === id ?
-                {...item, active: !item.active} :
-                item
-            )    
-        )
+        setPokemons(prevState => {
+            return Object.entries(prevState).reduce((acc, item) => {
+                const pokemon = {...item[1]};
+                if (pokemon.id === id) {
+                    pokemon.active = true;
+                };
+        
+                acc[item[0]] = pokemon;
+        
+                return acc;
+            }, {});
+        });
     }
+    
     return (
         <div className={s.page}>
             <h1>GAMEPAGE</h1>
             <div className={s.flex}>
           {
-            pokemons.map((item) => <PokemonCard
-              key={item.id}
-              name={item.name}
-              img={item.img}
-              id={item.id}
-              type={item.type}
-              values={item.values}
-              isActive={item.active}
-              onClickPokemon={onClickPokemon}
+            Object.entries(pokemons).map(([key, {name,img, id, type, values, active}]) => 
+                <PokemonCard
+                    key={key}
+                    name={name}
+                    img={img}
+                    id={id}
+                    type={type}
+                    values={values}
+                    isActive={active}
+                    onClickPokemon={onClickPokemon}
             />)
           }
         </div>
