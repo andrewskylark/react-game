@@ -7,6 +7,9 @@
     align-items: center;
     justify-content: center;
     background-image: url("../../assets/bg3.jpeg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .flex {
