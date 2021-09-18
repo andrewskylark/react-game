@@ -21,18 +21,25 @@ const GamePage = () => {
           });
     }, []);
 
-    const onClickPokemon = (id) => {
+    const onClickPokemon = (id, isActive, objID) => {
         setPokemons(prevState => {
             return Object.entries(prevState).reduce((acc, item) => {
                 const pokemon = {...item[1]};
                 if (pokemon.id === id) {
-                    pokemon.active = true;
+                    pokemon.active = !pokemon.active;
+                    console.log(objID)
+                    console.log(isActive)
                 };
         
                 acc[item[0]] = pokemon;
         
                 return acc;
             }, {});
+        });
+
+        database.ref('pokemons/'+ objID).set({
+            ...pokemons[objID],
+            active: !isActive,
         });
     }
     
@@ -44,6 +51,7 @@ const GamePage = () => {
             Object.entries(pokemons).map(([key, {name,img, id, type, values, active}]) => 
                 <PokemonCard
                     key={key}
+                    objID={key}
                     name={name}
                     img={img}
                     id={id}
