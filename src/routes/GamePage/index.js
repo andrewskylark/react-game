@@ -3,39 +3,76 @@ import Btn from '../../components/btn';
 import PokemonCard from '../../components/pokemonCard';
 import CARDSDATA from '../../components/pokemonCard/cardsData.json';
 
-import { useState } from 'react';
+import {useState, useEffect} from 'react';
 
-const POKEMONS = CARDSDATA.map(pokemon => {
-    Object.assign(pokemon, {'active': false})
-    return pokemon;
-})
+import database from "../../service/firebase.js"
+
 
 const GamePage = () => {
-    const [pokemons, setPokemons] = useState(() => POKEMONS.slice(0, 5));
+    const [pokemons, setPokemons] = useState({});
 
-    const onClickPokemon = (id) => {
-        setPokemons(prevState =>
-            prevState.map(
-                item => item.id === id ?
-                {...item, active: !item.active} :
-                item
-            )    
-        )
+    useEffect(() => {
+        database.ref('pokemons').once('value', (snapshot) => {
+            setPokemons(snapshot.val())
+          });
+    }, []);// [empty] - gets pokemons data once and sets render
+    // [pokemons] - watches pokemons and sets render on change
+
+    const onClickPokemon = (id, isActive, objID) => {
+        setPokemons(prevState => {
+            return Object.entries(prevState).reduce((acc, item) => {
+                const pokemon = {...item[1]};
+                if (pokemon.id === id) {
+                    pokemon.active = !pokemon.active;
+                };
+        
+                acc[item[0]] = pokemon;
+        
+                return acc;
+            }, {});
+        });
+
+        database.ref('pokemons/'+ objID).set({
+            ...pokemons[objID],
+            active: !isActive,
+        });
     }
+
+    const onClickAddPoke = () => {
+
+        const getRandom = (max) => {
+            return Math.floor(Math.random() * max);
+        }
+
+        let randomId = getRandom(CARDSDATA.length)
+
+        const newKey = database.ref().child('pokemons').push().key;
+        database.ref('pokemons/' + newKey).set(CARDSDATA[randomId]);
+
+        database.ref('pokemons').once('value', (snapshot) => {
+            setPokemons(snapshot.val())
+        });
+    }
+    
     return (
         <div className={s.page}>
             <h1>GAMEPAGE</h1>
+            <button onClick={onClickAddPoke}>
+                Add new pokemon
+            </button>
             <div className={s.flex}>
           {
-            pokemons.map((item) => <PokemonCard
-              key={item.id}
-              name={item.name}
-              img={item.img}
-              id={item.id}
-              type={item.type}
-              values={item.values}
-              isActive={item.active}
-              onClickPokemon={onClickPokemon}
+            Object.entries(pokemons).map(([key, {name,img, id, type, values, active}]) => 
+                <PokemonCard
+                    key={key}
+                    objID={key}
+                    name={name}
+                    img={img}
+                    id={id}
+                    type={type}
+                    values={values}
+                    isActive={active}
+                    onClickPokemon={onClickPokemon}
             />)
           }
         </div>
