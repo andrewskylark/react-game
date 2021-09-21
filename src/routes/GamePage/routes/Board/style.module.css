@@ -23,9 +23,11 @@
     padding: 6px;
     cursor: pointer;
 }
+
 .boardPlate:hover {
     background: rgba(255,255,255, .1);
 }
+
 .boardPlate.disabled:hover {
     background: none;
 }

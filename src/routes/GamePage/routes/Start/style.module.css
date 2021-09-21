@@ -16,6 +16,7 @@
     display: grid;
     grid-template-columns: auto auto auto;
     grid-gap: 40px;
+    
 }
 
 h1 {
@@ -28,7 +29,7 @@ button {
     margin: 0 auto 40px;
 }
 
-.card {
+.flex .card {
     width: 100%;
     height: 380px;
     cursor: pointer;
