@@ -11,10 +11,14 @@ import database from "../../service/firebase.js"
 const GamePage = () => {
     const [pokemons, setPokemons] = useState({});
 
-    useEffect(() => {
+    const getPokemons = () => {
         database.ref('pokemons').once('value', (snapshot) => {
-            setPokemons(snapshot.val())
-          });
+            setPokemons(snapshot.val());
+        });
+    }
+
+    useEffect(() => {
+        getPokemons();
     }, []);// [empty] - gets pokemons data once and sets render
     // [pokemons] - watches pokemons and sets render on change
 
@@ -24,9 +28,8 @@ const GamePage = () => {
                 const pokemon = {...item[1]};
                 if (pokemon.id === id) {
                     pokemon.active = !pokemon.active;
+                    acc[item[0]] = pokemon;//key / objID of Poke in firebase
                 };
-        
-                acc[item[0]] = pokemon;
         
                 return acc;
             }, {});
@@ -39,19 +42,13 @@ const GamePage = () => {
     }
 
     const onClickAddPoke = () => {
-
         const getRandom = (max) => {
             return Math.floor(Math.random() * max);
         }
-
         let randomId = getRandom(CARDSDATA.length)
-
         const newKey = database.ref().child('pokemons').push().key;
-        database.ref('pokemons/' + newKey).set(CARDSDATA[randomId]);
-
-        database.ref('pokemons').once('value', (snapshot) => {
-            setPokemons(snapshot.val())
-        });
+        
+        database.ref('pokemons/' + newKey).set(CARDSDATA[randomId]).then(() => getPokemons());
     }
     
     return (
