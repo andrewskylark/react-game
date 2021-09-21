@@ -1,24 +1,23 @@
 import s from './style.module.css';
 import Btn from '../../components/btn';
 import PokemonCard from '../../components/pokemonCard';
+
 import CARDSDATA from '../../components/pokemonCard/cardsData.json';
 
-import {useState, useEffect} from 'react';
-
-import database from "../../service/firebase.js"
+import {useState, useEffect, useContext} from 'react';
+import { FireBaseContext } from '../../context/firebaseContext';
 
 
 const GamePage = () => {
+    const firebase = useContext(FireBaseContext);
     const [pokemons, setPokemons] = useState({});
 
-    const getPokemons = () => {
-        database.ref('pokemons').once('value', (snapshot) => {
-            setPokemons(snapshot.val());
-        });
-    }
-
     useEffect(() => {
-        getPokemons();
+        firebase.getPokemonSocket((pokemons) => {
+            setPokemons(pokemons);
+        });
+
+        return () => firebase.getOffPokemonSocket();
     }, []);// [empty] - gets pokemons data once and sets render
     // [pokemons] - watches pokemons and sets render on change
 
@@ -28,16 +27,14 @@ const GamePage = () => {
                 const pokemon = {...item[1]};
                 if (pokemon.id === id) {
                     pokemon.active = !pokemon.active;
-                    acc[item[0]] = pokemon;//key / objID of Poke in firebase
+                    
                 };
-        
-                return acc;
-            }, {});
-        });
+                acc[item[0]] = pokemon;//key / objID of Poke in firebase
 
-        database.ref('pokemons/'+ objID).set({
-            ...pokemons[objID],
-            active: !isActive,
+                firebase.postPokemon(item[0], pokemon);
+                return acc;
+
+            }, {});
         });
     }
 
@@ -46,9 +43,8 @@ const GamePage = () => {
             return Math.floor(Math.random() * max);
         }
         let randomId = getRandom(CARDSDATA.length)
-        const newKey = database.ref().child('pokemons').push().key;
-        
-        database.ref('pokemons/' + newKey).set(CARDSDATA[randomId]).then(() => getPokemons());
+
+        firebase.addPokemon(CARDSDATA[randomId]);
     }
     
     return (
