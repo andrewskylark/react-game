@@ -4,7 +4,7 @@ import Btn from '../../../../components/btn'
 const FinishPage = () => {
     return (
         <div className={s.page}>
-            CONTACTS PAGE
+            FINISH PAGE
             <Btn 
                 text="Back to Home Page"
                 route=""

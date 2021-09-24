@@ -54,6 +54,7 @@ const StartPage = () => {
     return (
         <div className={s.page}>
             <h1>GAMEPAGE</h1>
+            <p className={s.promt}>Choose 5 cards</p>
             <button
                 onClick={onClickStartGame}
                 disabled={Object.keys(pokemonContext.pokemons).length < 5}

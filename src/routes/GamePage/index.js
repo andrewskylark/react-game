@@ -27,7 +27,8 @@ const GamePage = () => {
     return (
         <PokemonContext.Provider value={{
             pokemons: selectedPokemons,
-            onSelectedPokemons: onSelectedPokemons
+            onSelectedPokemons: onSelectedPokemons,
+            clearContext: setSelectedPokemons,
         }}>
             <Switch>
                 <Route path={`${match.path}/`} exact component={StartPage} />
