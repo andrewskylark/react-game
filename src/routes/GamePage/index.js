@@ -33,8 +33,8 @@ const GamePage = () => {
     const getPlayer2Cards = (player2) => {
         return setPlayer2(prevState => prevState = [...player2]);
     }
+    const [win, setWin] = useState(false);
 
-   
     return (
         <PokemonContext.Provider value={{
             pokemons: selectedPokemons,
@@ -42,6 +42,8 @@ const GamePage = () => {
             onPlayer2GetPokes: getPlayer2Cards,
             onSelectedPokemons: onSelectedPokemons,
             clearContext: clearContextPokemons,
+            win: win,
+            setWin: setWin,
         }}>
             <Switch>
                 <Route path={`${match.path}/`} exact component={StartPage} />

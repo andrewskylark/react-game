@@ -19,6 +19,20 @@
 .flex .card {
     width: 16vw;
     height: 270px;
+    margin-top: 0;
+}
+
+.flex .card.cardBoard.selected {
+    margin-top: -20px;
+}
+
+.card.cardBoard.selected {
+    margin-top: -20px;
+}
+
+.card.selected {
+    margin-top: -20px;
+    margin-left: 0;
 }
 
 h1 {

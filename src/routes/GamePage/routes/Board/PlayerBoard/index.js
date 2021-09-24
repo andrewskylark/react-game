@@ -3,14 +3,14 @@ import cn from 'classnames';
 import PokemonCard from '../../../../../components/pokemonCard';
 import s from './style.module.css';
 
-const PlayerBoard = ({player, cards, onClickCard}) => {
+const PlayerBoard = ({className, player, cards, onClickCard}) => {
     const [isSelected, setSelected] = useState(null);
     return (
         <>
             {
                 cards.map((item) => (
                     <div 
-                        className={cn(s.cardBoard, {
+                        className={cn(className, s.cardBoard, {
                             [s.selected]: isSelected === item.id
                         })}
                         onClick={() => {
