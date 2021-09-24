@@ -22,10 +22,11 @@ const counterWin = (board, player1, player2) => {
 }
 
 const BoardPage = () => {
-    const [cards, setCards] = useState({});
-    const { pokemons, clearContext } = useContext(PokemonContext);
+    const { pokemons, onPlayer2GetPokes } = useContext(PokemonContext);
     // const { pokemons } = useContext(PokemonContext);
+    
     const [board, setBoard] = useState([]);
+
     const [player1, setPlayer1] = useState(() => {
         return Object.values(pokemons).map(item => ({
             ...item,
@@ -43,11 +44,6 @@ const BoardPage = () => {
     }// if no cards go back to Game page
 
     useEffect(() => {
-        setCards(pokemons)
-        clearContext(prev => prev = {})
-    }, [])
-
-    useEffect(() => {
         const fetchData = async () => {
             const boardResponse = await fetch('https://reactmarathon-api.netlify.app/api/board');
             const boardRequest = await boardResponse.json();
@@ -61,13 +57,17 @@ const BoardPage = () => {
                 ...item,
                 possession: 'red',
             })))
+
+            onPlayer2GetPokes(player2Request.data.map(item => ({
+                ...item,
+                possession: 'red',
+            })))
         }
         fetchData();
     }, [])
 
     const onClickBoardCell = async (position) => {
-        console.log('####: board', position)
-        console.log('####: choiceCard', choiceCard)
+
         if (choiceCard) {
             const params = {
                 position,
@@ -110,6 +110,7 @@ const BoardPage = () => {
             } else {
                 alert('DRAW')
             }
+            history.push('/game/finish')
         }
     }, [steps]);
 

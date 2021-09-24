@@ -1,5 +1,5 @@
 .page {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,4 +8,38 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+}
+
+.flex {
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    grid-gap: 20px;
+}
+
+.flex .card {
+    width: 16vw;
+    height: 270px;
+}
+
+h1 {
+    width: fit-content;
+    margin: 0 auto 15px;
+}
+
+.promt {
+    width: fit-content;
+    margin: 0 auto 15px;
+    font-size: 16px;
+}
+
+.btns {
+    width: 100%;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.btns button {
+    margin: 0;
+    margin-right: 20px;
 }
