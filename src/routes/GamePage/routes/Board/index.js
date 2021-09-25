@@ -23,10 +23,7 @@ const counterWin = (board, player1, player2) => {
 
 const BoardPage = () => {
     const { pokemons, onPlayer2GetPokes, setWin} = useContext(PokemonContext);
-    // const { pokemons } = useContext(PokemonContext);
-    
     const [board, setBoard] = useState([]);
-
     const [player1, setPlayer1] = useState(() => {
         return Object.values(pokemons).map(item => ({
             ...item,
@@ -39,9 +36,9 @@ const BoardPage = () => {
 
     const history = useHistory();
     
-    // if (Object.keys(player1).length === 0) {
-    //     history.replace('/game');
-    // }// if no cards go back to Game page
+    if (Object.keys(pokemons).length === 0) {
+        history.replace('/game');
+    }// if no cards go back to Game page
 
     useEffect(() => {
         const fetchData = async () => {
