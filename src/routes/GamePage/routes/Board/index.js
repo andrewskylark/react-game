@@ -4,6 +4,8 @@ import PokemonCard from '../../../../components/pokemonCard';
 import { PokemonContext } from '../../../../context/pokemonContext';
 import PlayerBoard from './PlayerBoard';
 import s from './style.module.css';
+import Result from '../../../../components/results';
+import ArrowChoice from '../../../../components/arrowChoice';
 
 const counterWin = (board, player1, player2) => {
     let player1Count = player1.length;
@@ -21,8 +23,12 @@ const counterWin = (board, player1, player2) => {
     return [player1Count, player2Count]
 }
 
+const getRandomPlayer = () => {
+    return (Math.random() > 0.5) ? 1 : 2;
+}
+
 const BoardPage = () => {
-    const { pokemons, onPlayer2GetPokes, setWin} = useContext(PokemonContext);
+    const { pokemons, onPlayer2GetPokes, setWin } = useContext(PokemonContext);
     const [board, setBoard] = useState([]);
     const [player1, setPlayer1] = useState(() => {
         return Object.values(pokemons).map(item => ({
@@ -33,9 +39,8 @@ const BoardPage = () => {
     const [player2, setPlayer2] = useState([]);
     const [choiceCard, setChoiceCard] = useState(null);
     const [steps, setSteps] = useState(0);
-
     const history = useHistory();
-    
+
     if (Object.keys(pokemons).length === 0) {
         history.replace('/game');
     }// if no cards go back to Game page
@@ -62,6 +67,20 @@ const BoardPage = () => {
         }
         fetchData();
     }, [])
+    const [turn, setTurn] = useState()
+   
+    useEffect(() => {
+        const SetTurnOnDelay = async () => {
+            const sleep = (ms) => {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+            await sleep(2500)
+            const playerX = getRandomPlayer();
+            setTurn(playerX)
+        }
+        SetTurnOnDelay()
+    }, [])// gets random 1 or 2 after delay, sets who goes first
+
 
     const onClickBoardCell = async (position) => {
 
@@ -83,9 +102,11 @@ const BoardPage = () => {
 
             if (choiceCard.player === 1) {
                 setPlayer1(prevState => (prevState.filter(item => item.id !== choiceCard.id)))
+                setTurn((prevState) => prevState + 1);
             }
             if (choiceCard.player === 2) {
                 setPlayer2(prevState => (prevState.filter(item => item.id !== choiceCard.id)))
+                setTurn((prevState) => prevState - 1);
             }//filter array, return array without choice.id card
 
             setBoard(request.data);
@@ -96,28 +117,38 @@ const BoardPage = () => {
         }
     }
 
+    const [result, setResult] = useState();
+    const [show, setShow] = useState(false);
     useEffect(() => {
         if (steps === 9) {
             const [count1, count2] = counterWin(board, player1, player2);
 
             if (count1 > count2) {
-                alert('YOU WIN')
+                setResult('win')
                 setWin(prev => prev = true)
             } else if (count1 < count2) {
-                alert('YOU LOOSE')
+                setResult('lose')
                 setWin(prev => prev = false)
             } else {
-                alert('DRAW')
+                setResult('draw')
                 setWin(prev => prev = false)
             }
-            history.push('/game/finish')
+            setShow(true)
         }
     }, [steps]);
 
     return (
         <div className={s.root}>
+            <ArrowChoice
+                side={turn}
+            />
+            <Result
+                type={result}
+                show={show}
+            />
             <div className={s.playerOne}>
                 <PlayerBoard
+                    turn={turn}
                     player={1}
                     cards={player1}
                     onClickCard={(card) => setChoiceCard(card)}
@@ -140,6 +171,7 @@ const BoardPage = () => {
             </div>
             <div className={s.playerTwo}>
                 <PlayerBoard
+                    turn={turn}
                     player={2}
                     cards={player2}
                     onClickCard={(card) => setChoiceCard(card)}

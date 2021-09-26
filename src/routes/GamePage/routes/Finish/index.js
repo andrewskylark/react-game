@@ -16,9 +16,13 @@ const FinishPage = () => {
 
     const onClickEndGame = () => {
         clearContext();
+        
         if (win === true) {
-            firebase.addPokemon(chosenCard)
+            if (chosenCard) {
+                firebase.addPokemon(chosenCard)
+            }
         }
+        
         history.replace('/game');
     }
 
@@ -41,7 +45,7 @@ const FinishPage = () => {
         endGameMsg = "You won! Choose one card from your oponnent's deck, hit END GAME and make it yours!"
     }
     if (win === false) {
-        endGameMsg = "You can take one card from your oponnent's deck, if you win next time!"
+        endGameMsg = "Win and get one of your opponent's cards next time!!"
     }
 
     return (
