@@ -63,7 +63,7 @@ const BoardPage = () => {
             onPlayer2GetPokes(player2Request.data.map(item => ({
                 ...item,
                 possession: 'red',
-            })))
+            })))   
         }
         fetchData();
     }, [])
@@ -81,9 +81,14 @@ const BoardPage = () => {
         SetTurnOnDelay()
     }, [])// gets random 1 or 2 after delay, sets who goes first
 
-
     const onClickBoardCell = async (position) => {
-
+        const isDublicate = board.some(({ card }) => {
+            return (
+                card?.id === choiceCard?.id &&
+                card?.id === choiceCard?.id
+            );
+        });
+        if (isDublicate) return;
         if (choiceCard) {
             const params = {
                 position,

@@ -12,26 +12,33 @@ const FinishPage = () => {
     const { pokemons, player2Cards, clearContext, win } = useContext(PokemonContext);
     const firebase = useContext(FireBaseContext);
     const history = useHistory();
-    let endGameMsg = '';
+    // const [turn, setTurn] = useState();
 
+    // win === true ? setTurn(2) : setTurn(1);
+    let endGameMsg = '';
     const onClickEndGame = () => {
         clearContext();
-        
+
         if (win === true) {
             if (chosenCard) {
                 firebase.addPokemon(chosenCard)
+                history.replace('/game');
+            } else if (chosenCard === {}) {
+                alert('CHOOSE CARD!')
             }
         }
-        
-        history.replace('/game');
+        if (win === false) {
+            history.replace('/game');
+        }
     }
-
+    
     if (Object.keys(pokemons).length === 0 && Object.keys(player2Cards).length === 0) {
         history.replace('/game');
     }//return to gamepage if no cards
-
-    const [chosenCard, setChosenCard] = useState({})
     
+    const [chosenCard, setChosenCard] = useState({})
+    console.log(chosenCard)
+
     const setCardToGet = (card) => {
         if (win === true) {
             let card2 = card;
@@ -84,6 +91,7 @@ const FinishPage = () => {
                 <PlayerBoard
                     className={s.card}
                     player={2}
+                    turn={2}
                     cards={player2Cards}
                     onClickCard={(card) => setCardToGet(card)}
                 />
