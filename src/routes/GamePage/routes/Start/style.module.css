@@ -21,7 +21,13 @@
 
 h1 {
     width: fit-content;
-    margin: 0 auto 20px;
+    margin: 0 auto 15px;
+}
+
+.promt {
+    width: fit-content;
+    margin: 0 auto 15px;
+    font-size: 16px;
 }
 
 button {

@@ -1,9 +1,7 @@
 import s from './style.module.css';
 import Btn from '../../../../components/btn';
 import PokemonCard from '../../../../components/pokemonCard';
-
 // import CARDSDATA from '../../../../components/pokemonCard/cardsData.json';
-
 import { useState, useEffect, useContext } from 'react';
 import { FireBaseContext } from '../../../../context/firebaseContext';
 import { PokemonContext } from '../../../../context/pokemonContext';
@@ -18,7 +16,7 @@ const StartPage = () => {
 
     useEffect(() => {
         firebase.getPokemonSocket((pokemons) => {
-            setPokemons(pokemons);
+            setPokemons(pokemons); 
         });
 
         return () => firebase.getOffPokemonSocket();
@@ -38,7 +36,6 @@ const StartPage = () => {
 
         }))
     }
-
     // const onClickAddPoke = () => {
     //     const getRandom = (max) => {
     //         return Math.floor(Math.random() * max);
@@ -54,6 +51,7 @@ const StartPage = () => {
     return (
         <div className={s.page}>
             <h1>GAMEPAGE</h1>
+            <p className={s.promt}>Choose 5 cards</p>
             <button
                 onClick={onClickStartGame}
                 disabled={Object.keys(pokemonContext.pokemons).length < 5}
