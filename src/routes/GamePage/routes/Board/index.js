@@ -6,6 +6,9 @@ import PlayerBoard from './PlayerBoard';
 import s from './style.module.css';
 import Result from '../../../../components/results';
 import ArrowChoice from '../../../../components/arrowChoice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectChosenPokemonsData } from '../../../../store/chosenPokemons';
+import { getPlayer2CardsAsync } from '../../../../store/player2Cards';
 
 const counterWin = (board, player1, player2) => {
     let player1Count = player1.length;
@@ -19,19 +22,18 @@ const counterWin = (board, player1, player2) => {
             player1Count++;
         }
     });
-
     return [player1Count, player2Count]
 }
-
 const getRandomPlayer = () => {
     return (Math.random() > 0.5) ? 1 : 2;
 }
 
 const BoardPage = () => {
-    const { pokemons, onPlayer2GetPokes, setWin } = useContext(PokemonContext);
+    const { setWin } = useContext(PokemonContext);
+    const chosenCards = useSelector(selectChosenPokemonsData)
     const [board, setBoard] = useState([]);
     const [player1, setPlayer1] = useState(() => {
-        return Object.values(pokemons).map(item => ({
+        return Object.values(chosenCards).map(item => ({
             ...item,
             possession: 'blue',
         }))//takes all poke values from context, sets posesion property
@@ -40,8 +42,9 @@ const BoardPage = () => {
     const [choiceCard, setChoiceCard] = useState(null);
     const [steps, setSteps] = useState(0);
     const history = useHistory();
+    const dispatch = useDispatch()
 
-    if (Object.keys(pokemons).length === 0) {
+    if (Object.keys(chosenCards).length === 0) {
         history.replace('/game');
     }// if no cards go back to Game page
 
@@ -60,12 +63,13 @@ const BoardPage = () => {
                 possession: 'red',
             })))
 
-            onPlayer2GetPokes(player2Request.data.map(item => ({
+            dispatch(getPlayer2CardsAsync(player2Request.data.map(item => ({
                 ...item,
                 possession: 'red',
-            })))   
+            }))))//send to redux
         }
         fetchData();
+        
     }, [])
     const [turn, setTurn] = useState()
    

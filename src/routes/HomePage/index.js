@@ -1,5 +1,3 @@
-// import style from './style.module.css';
-
 import Header from '../../components/header';
 import Layout from '../../components/layout';
 

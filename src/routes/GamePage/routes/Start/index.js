@@ -1,31 +1,35 @@
 import s from './style.module.css';
 import Btn from '../../../../components/btn';
 import PokemonCard from '../../../../components/pokemonCard';
-// import CARDSDATA from '../../../../components/pokemonCard/cardsData.json';
 import { useState, useEffect, useContext } from 'react';
-import { FireBaseContext } from '../../../../context/firebaseContext';
-import { PokemonContext } from '../../../../context/pokemonContext';
+// import { FireBaseContext } from '../../../../context/firebaseContext';
 import { useHistory } from 'react-router';
-
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { getPokemonsAsync, selectPokemonsData } from '../../../../store/pokemons';
+import { getChosenPokemonsAsync} from '../../../../store/chosenPokemons';
 
 const StartPage = () => {
-    const firebase = useContext(FireBaseContext);
-    const [pokemons, setPokemons] = useState({});
     const history = useHistory();
-    const pokemonContext = useContext(PokemonContext);
+    const dispatch = useDispatch();
+    const pokemonsRedux = useSelector(selectPokemonsData);
+    const [pokemons, setPokemons] = useState({});
 
     useEffect(() => {
-        firebase.getPokemonSocket((pokemons) => {
-            setPokemons(pokemons); 
-        });
-
-        return () => firebase.getOffPokemonSocket();
+        dispatch(getPokemonsAsync());//send pokes to redux
+        // firebase.getPokemonSocket((pokemons) => {
+        //     setPokemons(pokemons);
+        // });
+        // return () => firebase.getOffPokemonSocket();
     }, []);// [empty] - gets pokemons data once and sets render
     // [pokemons] - watches pokemons and sets render on change
-
+    useEffect(() => {
+        setPokemons(pokemonsRedux);
+    }, [pokemonsRedux]);//set Pokemons on change of pokemonsRedux
+    
+    const [chosenPokemons, setChosenPokemons] = useState({});
     const onClickPokemon = (key) => {
         const pokemon = { ...pokemons[key] };
-        pokemonContext.onSelectedPokemons(key, pokemon);
 
         setPokemons(prevState => ({
             ...prevState,
@@ -33,18 +37,28 @@ const StartPage = () => {
                 ...prevState[key],
                 selected: !prevState[key].selected,
             }
-
         }))
-    }
-    // const onClickAddPoke = () => {
-    //     const getRandom = (max) => {
-    //         return Math.floor(Math.random() * max);
-    //     }
-    //     let randomId = getRandom(CARDSDATA.length)
+        setChosenPokemons(prevState => {
+            if (prevState[key]) {
+                const copyState = {...prevState};
+                delete copyState[key];
 
-    //     firebase.addPokemon(CARDSDATA[randomId]);
-    // }
+                return copyState;
+            }
+            return {
+                ...prevState,
+                [key]: pokemon,
+            }
+        })
+    }
+    // useEffect(() => {
+    //     dispatch(fetchChosenPokemonsResolve(ChosenPokemons));
+    // }, []);
+    // useEffect(() => {
+    //     setChosenPokemons(ChosenPokemons);
+    // }, [ChosenPokemons]);//set Pokemons on change of pokemonsRedux
     const onClickStartGame = () => {
+        dispatch(getChosenPokemonsAsync(chosenPokemons));
         history.push('/game/board');
     }
 
@@ -54,7 +68,7 @@ const StartPage = () => {
             <p className={s.promt}>Choose 5 cards</p>
             <button
                 onClick={onClickStartGame}
-                disabled={Object.keys(pokemonContext.pokemons).length < 5}
+                disabled={Object.keys(chosenPokemons).length < 5}
             >
                 Start Game
             </button>
@@ -73,7 +87,7 @@ const StartPage = () => {
                             isActive={true}
                             isSelected={selected}
                             onClickPokemon={() => {
-                                if (Object.keys(pokemonContext.pokemons).length < 5 || selected) {
+                                if (Object.keys(chosenPokemons).length < 5 || selected) {
                                     onClickPokemon(key)
                                 }
                             }}
