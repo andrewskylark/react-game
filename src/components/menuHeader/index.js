@@ -2,6 +2,7 @@ import Menu from '../menu'
 import NavBar from '../navBar'
 import { useState } from "react";
 import Modal from '../modal';
+import LoginForm from '../loginForm';
 
 const MenuHeader = ({ bgActive }) => {
     const [isOpened, setOpened] = useState(false);
@@ -14,6 +15,9 @@ const MenuHeader = ({ bgActive }) => {
     }
     const onClickLogin = () => {
         setOpenedModal(prevState => !prevState);
+    }
+    const onSubmitLoginForm = (values) => {
+        console.log(values)
     }
     return (
         <>
@@ -32,7 +36,9 @@ const MenuHeader = ({ bgActive }) => {
                 title="Log in or register"
                 onCloseModal={onClickLogin}
             >
-                text
+                <LoginForm
+                    onSubmit={onSubmitLoginForm}
+                />
             </Modal>
         </>
     )
