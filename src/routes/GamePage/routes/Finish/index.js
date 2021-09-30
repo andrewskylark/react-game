@@ -1,44 +1,49 @@
 import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-// import cn from 'classnames';
-import { FireBaseContext } from '../../../../context/firebaseContext';
 import { PokemonContext } from '../../../../context/pokemonContext';
 import s from './style.module.css';
 import Btn from '../../../../components/btn'
 import PokemonCard from '../../../../components/pokemonCard';
 import PlayerBoard from '../Board/PlayerBoard';
+import { useSelector } from 'react-redux';
+import { selectChosenPokemonsData } from '../../../../store/chosenPokemons';
+import { selectPlayer2CardsData } from '../../../../store/player2Cards';
+import FirebaseClass from '../../../../service/firebase';
 
 const FinishPage = () => {
-    const { pokemons, player2Cards, clearContext, win } = useContext(PokemonContext);
-    const firebase = useContext(FireBaseContext);
+    const { win } = useContext(PokemonContext);
     const history = useHistory();
-    // const [turn, setTurn] = useState();
-
-    // win === true ? setTurn(2) : setTurn(1);
+    const player1Cards = useSelector(selectChosenPokemonsData);
+    const player2Cards = useSelector(selectPlayer2CardsData)
+    const [chosenCard, setChosenCard] = useState({})
+    
     let endGameMsg = '';
+    let turn = ''
+    if (win === true) {
+        turn = 2;//player 2 card cab be selected if player = turn = 2
+        endGameMsg = "You won! Choose one card from your oponnent's deck, hit END GAME and make it yours!"
+    }
+    if (win === false) {
+        turn = 1;
+        endGameMsg = "Win and get one of your opponent's cards next time!!"
+    }
+    if (Object.keys(player1Cards).length === 0 && Object.keys(player2Cards).length === 0) {
+        history.replace('/game');
+    }//return to gamepage if no cards
+    
     const onClickEndGame = () => {
-        clearContext();
-
         if (win === true) {
-            if (chosenCard) {
-                firebase.addPokemon(chosenCard)
+            if (Object.keys(chosenCard).length > 0) {
+                FirebaseClass.addPokemon(chosenCard)
                 history.replace('/game');
-            } else if (chosenCard === {}) {
+            } else if (Object.keys(chosenCard).length === 0) {
                 alert('CHOOSE CARD!')
             }
         }
         if (win === false) {
-            history.replace('/game');
+            history.replace('/game');   
         }
     }
-    
-    if (Object.keys(pokemons).length === 0 && Object.keys(player2Cards).length === 0) {
-        history.replace('/game');
-    }//return to gamepage if no cards
-    
-    const [chosenCard, setChosenCard] = useState({})
-    console.log(chosenCard)
-
     const setCardToGet = (card) => {
         if (win === true) {
             let card2 = card;
@@ -48,20 +53,13 @@ const FinishPage = () => {
         }
     }
 
-    if (win === true) {
-        endGameMsg = "You won! Choose one card from your oponnent's deck, hit END GAME and make it yours!"
-    }
-    if (win === false) {
-        endGameMsg = "Win and get one of your opponent's cards next time!!"
-    }
-
     return (
         <div className={s.page}>
             <h1>GAME OVER</h1>
             <p className={s.promt}>Your cards</p>
             <div className={s.flex}>
                 {
-                    Object.values(pokemons).map(item => {
+                    Object.values(player1Cards).map(item => {
                         return <PokemonCard
                             className={s.card}
                             key={item.id}
@@ -91,7 +89,7 @@ const FinishPage = () => {
                 <PlayerBoard
                     className={s.card}
                     player={2}
-                    turn={2}
+                    turn={turn}
                     cards={player2Cards}
                     onClickCard={(card) => setCardToGet(card)}
                 />

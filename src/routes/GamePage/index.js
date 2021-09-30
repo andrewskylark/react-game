@@ -7,41 +7,11 @@ import BoardPage from "./routes/Board";
 import FinishPage from "./routes/Finish";
 
 const GamePage = () => {
-    const [selectedPokemons, setSelectedPokemons] = useState({});
     const match = useRouteMatch();
-
-    const clearContextPokemons = () => {
-        setSelectedPokemons(prevState => prevState = {});
-        setPlayer2(prevState => prevState = []);
-    }// clears context of pokemons
-
-    const onSelectedPokemons = (key, pokemon) => {
-        setSelectedPokemons(prevState => {
-            if (prevState[key]) {
-                const copyState = {...prevState};
-                delete copyState[key];
-
-                return copyState;
-            }
-            return {
-                ...prevState,
-                [key]: pokemon,
-            }
-        })
-    }
-    const [player2Cards, setPlayer2] = useState([]);
-    const getPlayer2Cards = (player2) => {
-        return setPlayer2(prevState => prevState = [...player2]);
-    }
     const [win, setWin] = useState(false);
 
     return (
         <PokemonContext.Provider value={{
-            pokemons: selectedPokemons,
-            player2Cards: player2Cards,
-            onPlayer2GetPokes: getPlayer2Cards,
-            onSelectedPokemons: onSelectedPokemons,
-            clearContext: clearContextPokemons,
             win: win,
             setWin: setWin,
         }}>
