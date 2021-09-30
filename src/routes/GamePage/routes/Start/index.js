@@ -1,8 +1,7 @@
 import s from './style.module.css';
 import Btn from '../../../../components/btn';
 import PokemonCard from '../../../../components/pokemonCard';
-import { useState, useEffect, useContext } from 'react';
-// import { FireBaseContext } from '../../../../context/firebaseContext';
+import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
@@ -17,12 +16,7 @@ const StartPage = () => {
 
     useEffect(() => {
         dispatch(getPokemonsAsync());//send pokes to redux
-        // firebase.getPokemonSocket((pokemons) => {
-        //     setPokemons(pokemons);
-        // });
-        // return () => firebase.getOffPokemonSocket();
     }, []);// [empty] - gets pokemons data once and sets render
-    // [pokemons] - watches pokemons and sets render on change
     useEffect(() => {
         setPokemons(pokemonsRedux);
     }, [pokemonsRedux]);//set Pokemons on change of pokemonsRedux
@@ -51,12 +45,6 @@ const StartPage = () => {
             }
         })
     }
-    // useEffect(() => {
-    //     dispatch(fetchChosenPokemonsResolve(ChosenPokemons));
-    // }, []);
-    // useEffect(() => {
-    //     setChosenPokemons(ChosenPokemons);
-    // }, [ChosenPokemons]);//set Pokemons on change of pokemonsRedux
     const onClickStartGame = () => {
         dispatch(getChosenPokemonsAsync(chosenPokemons));
         history.push('/game/board');
