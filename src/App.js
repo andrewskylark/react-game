@@ -1,5 +1,7 @@
 import { useLocation, Route, Switch, Redirect } from "react-router-dom";
 import cn from 'classnames';
+import {NotificationContainer} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 import MenuHeader from "./components/menuHeader";
 import Footer from "./components/footer";
@@ -35,11 +37,12 @@ const App = () => {
                 )} />
               </Switch>
             </div>
+            <NotificationContainer/>
             <Footer />
           </>
         </Route>
     </Switch>
-
+  
   )
 };
 
