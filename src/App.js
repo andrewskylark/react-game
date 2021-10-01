@@ -13,6 +13,7 @@ import ContactsPage from "./routes/ContactsPage";
 import NotFoundPage from "./routes/NotFoundPage";
 
 import s from "./App.module.css"
+import PrivateRoute from "./components/PrivateRoute";
 
 const App = () => {
   const location = useLocation();
@@ -29,9 +30,9 @@ const App = () => {
               <Switch>
                 <Route path="/" exact component={HomePage} />
                 <Route path="/home" component={HomePage} />
-                <Route path="/game" component={GamePage} />
-                <Route path="/about" component={AboutPage} />
-                <Route path="/contacts" component={ContactsPage} />
+                <PrivateRoute path="/game" component={GamePage} />
+                <PrivateRoute path="/about" component={AboutPage} />
+                <PrivateRoute path="/contacts" component={ContactsPage} />
                 <Route render={() => (
                   <Redirect to="/404" />
                 )} />

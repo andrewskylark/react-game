@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {NotificationManager} from 'react-notifications';
 
-
 import Menu from '../menu'
 import NavBar from '../navBar'
 import Modal from '../modal';
@@ -19,7 +18,7 @@ const MenuHeader = ({ bgActive }) => {
     const onClickLogin = () => {
         setOpenedModal(prevState => !prevState);
     }
-    const onSubmitLoginForm = async ({email, password}) => {
+    const onSubmitLoginForm = async ({email, password, auth}) => {
         // console.log(values)
         const requestOptions = {
             method: 'POST',
@@ -29,11 +28,19 @@ const MenuHeader = ({ bgActive }) => {
                 returnSecureToken: true,
             })
         }
-        const responce = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyB5F8VIr6hcBgKoQAN6yWJ-c145EiJmZdA', requestOptions).then(res => res.json());
-        console.log(responce)
+        let responce;
+        if (auth === false) {
+            responce = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyB5F8VIr6hcBgKoQAN6yWJ-c145EiJmZdA', requestOptions).then(res => res.json());
+        }
+        if (auth === true) {
+            responce = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyB5F8VIr6hcBgKoQAN6yWJ-c145EiJmZdA', requestOptions).then(res => res.json());
+        }
         if (responce.hasOwnProperty('error')) {
             NotificationManager.error(responce.error.message, 'Error!');
         } else {
+            if (auth === true) {
+                localStorage.setItem('idToken', responce.idToken)
+            }
             NotificationManager.success('Success!');
         }
         
@@ -52,7 +59,7 @@ const MenuHeader = ({ bgActive }) => {
             />
             <Modal
                 isOpened={isOpenedModal}
-                title="Log in or register"
+                title="Log in, or register"
                 onCloseModal={onClickLogin}
             >
                 <LoginForm
