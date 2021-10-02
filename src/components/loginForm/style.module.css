@@ -1,0 +1,31 @@
+.auth {
+    display: flex;
+    align-content: center;
+    align-items: baseline;
+
+    font-size: 14px;
+}
+
+.auth button {
+    width: fit-content;
+    margin: 0;
+    margin-left: 2px;
+    padding: 2px;
+
+    color: #252934;
+    font-size: 14px;
+    font-family: 'Overlock', Arial, Helvetica, sans-serif;
+    text-transform: none;
+    border: none;
+    background: none;
+}
+
+.auth button:hover,
+.auth button:focus {
+    color: #f300b4;
+    border: none;
+}
+
+.auth button:active {
+    padding: 2px;
+}

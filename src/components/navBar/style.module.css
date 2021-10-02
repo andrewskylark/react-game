@@ -24,6 +24,12 @@
   font-size: 1.6rem;
   color: #fafafa;
   cursor: default;
+  width: 50px;
+}
+
+.root .brand svg {
+  width: 80px;
+  height: 30px;
 }
 
 /***** Menu Button *****/
@@ -84,4 +90,29 @@
   #navbar {
     background: #181d23aa;
   }
+}
+
+.loginAndMenu {
+  display: flex;
+}
+
+.loginWrapper {
+  width: 22px;
+  height: 22px;
+  margin-right: 12px;
+}
+
+.loginWrapper svg {
+  width: 100%;
+  height: 100%;
+}
+
+.loginWrapper svg g {
+  fill: white;
+  transition: fill ease 0.25s;
+}
+
+.loginWrapper:hover svg g {
+  fill: #f300b4;
+  cursor: pointer;
 }
