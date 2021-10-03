@@ -44,8 +44,21 @@ const MenuHeader = ({ bgActive }) => {
             if (register === false) {
                 localStorage.setItem('idToken', responce.idToken);
                 alert('setTocekn')
+                const pokemonsStart = await fetch('https://reactmarathon-api.herokuapp.com/api/pokemons/starter').then((res) => res.json());
+                for (const item of pokemonsStart.data) {
+                    await fetch(`https://react-game-1c6e1-default-rtdb.firebaseio.com/${responce.localId}/pokemons.json?auth=${responce.idToken}`, {
+                        method: 'POST',
+                        body: JSON.stringify(item),
+                    });
+                    console.log(item)
+                }
+               
                 onClickLogin();
             }
+            // if (register === true) {
+            //     const pokemonsStart = await fetch('https://reactmarathon-api.herokuapp.com/api/pokemons/starter').then((res) => res.json());
+            //     console.log(pokemonsStart)
+            // }
             NotificationManager.success(
                 register ? 'Registered succesfully!' : 'Signed in, welcome back!'
             );
