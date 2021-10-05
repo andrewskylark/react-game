@@ -39,7 +39,6 @@ export const getUserUpdateAsync = () => async (dispatch) => {
             dispatch(removeUser());
         } else {
             dispatch(updateUser(responce.users[0]));
-            console.log(responce.users[0])
         }
     } else {
         dispatch(removeUser());

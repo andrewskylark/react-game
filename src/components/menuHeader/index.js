@@ -5,17 +5,12 @@ import Menu from '../menu'
 import NavBar from '../navBar'
 import Modal from '../modal';
 import LoginForm from '../loginForm';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getUserUpdateAsync } from "../../store/user";
-import { selectUserLoading, selectUserLocalID } from "../../store/user";
-
 
 const MenuHeader = ({ bgActive }) => {
     const dispatch = useDispatch();
-    const isUserLoading = useSelector(selectUserLoading);
-    // const localId = useSelector(selectUserLocalID)
-    console.log(isUserLoading)
-    // console.log(localId)
+
     const [isOpened, setOpened] = useState(false);
     const [isOpenedModal, setOpenedModal] = useState(false);
     const SIGN_UP_POST = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyB5F8VIr6hcBgKoQAN6yWJ-c145EiJmZdA';
@@ -49,13 +44,6 @@ const MenuHeader = ({ bgActive }) => {
         } else {
             if (register === false) {
                 localStorage.setItem('idToken', responce.idToken);
-                // const pokemonsStart = await fetch('https://reactmarathon-api.herokuapp.com/api/pokemons/starter').then((res) => res.json());
-                // for (const item of pokemonsStart.data) {
-                //     await fetch(`https://react-game-1c6e1-default-rtdb.firebaseio.com/${responce.localId}/pokemons.json?auth=${responce.idToken}`, {
-                //         method: 'POST',
-                //         body: JSON.stringify(item),
-                //     });//creates unique user upon signing in, sends 5 cards to firebase
-                // }
                 dispatch(getUserUpdateAsync());//sets user to redux
                 onClickLogin();
             }
