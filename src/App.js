@@ -11,6 +11,7 @@ import HomePage from "./routes/HomePage";
 import GamePage from "./routes/GamePage";
 import AboutPage from "./routes/AboutPage";
 import ContactsPage from "./routes/ContactsPage";
+import UserPage from "./routes/UserPage";
 import NotFoundPage from "./routes/NotFoundPage";
 
 import s from "./App.module.css"
@@ -43,6 +44,7 @@ const App = () => {
               <Switch>
                 <Route path="/" exact component={HomePage} />
                 <Route path="/home" component={HomePage} />
+                <Route path="/user" component={UserPage} />
                 <PrivateRoute path="/game" component={GamePage} />
                 <PrivateRoute path="/about" component={AboutPage} />
                 <PrivateRoute path="/contacts" component={ContactsPage} />
