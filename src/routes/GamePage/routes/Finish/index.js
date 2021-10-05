@@ -1,14 +1,16 @@
 import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { PokemonContext } from '../../../../context/pokemonContext';
+
 import s from './style.module.css';
 import Btn from '../../../../components/btn'
 import PokemonCard from '../../../../components/pokemonCard';
 import PlayerBoard from '../Board/PlayerBoard';
-import { useSelector } from 'react-redux';
 import { selectChosenPokemonsData } from '../../../../store/chosenPokemons';
 import { selectPlayer2CardsData } from '../../../../store/player2Cards';
 import FirebaseClass from '../../../../service/firebase';
+import { selectUserLocalID } from '../../../../store/user';
 
 const FinishPage = () => {
     const { win } = useContext(PokemonContext);
@@ -16,12 +18,13 @@ const FinishPage = () => {
     const player1Cards = useSelector(selectChosenPokemonsData);
     const player2Cards = useSelector(selectPlayer2CardsData)
     const [chosenCard, setChosenCard] = useState({})
+    const userID = useSelector(selectUserLocalID);
     
     let endGameMsg = '';
     let turn = ''
     if (win === true) {
         turn = 2;//player 2 card cab be selected if player = turn = 2
-        endGameMsg = "You won! Choose one card from your oponnent's deck, hit END GAME and make it yours!"
+        endGameMsg = "You won! Choose one card from your oponnent's deck, hit END GAME and claim it!"
     }
     if (win === false) {
         turn = 1;
@@ -34,7 +37,7 @@ const FinishPage = () => {
     const onClickEndGame = () => {
         if (win === true) {
             if (Object.keys(chosenCard).length > 0) {
-                FirebaseClass.addPokemon(chosenCard)
+                FirebaseClass.addPokemon(chosenCard, userID)
                 history.replace('/game');
             } else if (Object.keys(chosenCard).length === 0) {
                 alert('CHOOSE CARD!')
