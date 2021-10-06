@@ -1,4 +1,4 @@
-.auth {
+.register {
     display: flex;
     align-content: center;
     align-items: baseline;
@@ -6,7 +6,7 @@
     font-size: 14px;
 }
 
-.auth button {
+.register button {
     width: fit-content;
     margin: 0;
     margin-left: 2px;
@@ -20,12 +20,12 @@
     background: none;
 }
 
-.auth button:hover,
-.auth button:focus {
+.register button:hover,
+.register button:focus {
     color: #f300b4;
     border: none;
 }
 
-.auth button:active {
+.register button:active {
     padding: 2px;
 }

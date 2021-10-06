@@ -1,31 +1,37 @@
+import { useEffect } from "react";
 import { useState } from "react";
 
 import Input from "../input";
 
 import s from './style.module.css'
 
-const LoginForm = ({ onSubmit }) => {
+const LoginForm = ({ onSubmit, isResetField = false }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [auth, setAuth] = useState('false');
+    const [register, setRegister] = useState(false);
+
+    useEffect(() => {
+        setEmail('');
+        setPassword('');
+    }, [isResetField]);
 
     const OnSubmitForm = (evt) => {
         evt.preventDefault();
         onSubmit && onSubmit({
             email,
             password,
-            auth
+            register
         })
         setEmail('');
         setPassword('');
     }
     const onClickRegister = (evt) => {
         evt.preventDefault();
-        setAuth(!auth);
+        setRegister(!register);
     }
     return (
         <form onSubmit={OnSubmitForm}>
-            <Input type="email" name="email" label="Enter emai" value={email}
+            <Input type="email" name="email" label="Enter Email" value={email}
                 onChange={(evt) => setEmail(evt.target.value)}
             />
             <Input type="password" name="password" label="Enter Password" value={password}
@@ -33,16 +39,16 @@ const LoginForm = ({ onSubmit }) => {
             />
             <button>
                 {
-                    auth ? "Login" : "Register"
+                    register ? "Register" : "Login" 
                 }
             </button>
-            <p className={s.auth}>
+            <p className={s.register}>
                 {
-                    auth ? "New player? " : "Registered?"
+                    register ? "Welcome back! " : "New player? "
                 }
                 <button onClick={onClickRegister}>
                     {
-                        auth ? "Register" : "Sign in"
+                        register ? "Sign in" : "Register" 
                     }
                 </button>
             </p>
