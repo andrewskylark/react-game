@@ -69,7 +69,7 @@ const BoardPage = () => {
             }))))//send to redux
         }
         fetchData();
-        
+        // eslint-disable-next-line
     }, [])
     const [turn, setTurn] = useState()
    
@@ -143,7 +143,7 @@ const BoardPage = () => {
                 setWin(prev => prev = false)
             }
             setShow(true)
-        }
+        }// eslint-disable-next-line
     }, [steps]);
 
     return (

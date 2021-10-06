@@ -26,6 +26,7 @@ const App = () => {
   
   useEffect(() => {
     dispatch(getUserAsync())
+    // eslint-disable-next-line
   }, []);
 
   if (isUserLoading) {

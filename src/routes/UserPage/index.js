@@ -16,6 +16,7 @@ const UserPage = () => {
     
     useEffect(() => {
         dispatch(getPokemonsAsync());//send pokes to redux
+        // eslint-disable-next-line
     }, []);// [empty] - gets pokemons data once and sets render
     useEffect(() => {
         setPokemons(pokemonsRedux);
