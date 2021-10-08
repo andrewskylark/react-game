@@ -3,16 +3,17 @@ import Btn from '../../../../components/btn';
 import PokemonCard from '../../../../components/pokemonCard';
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getPokemonsAsync, selectPokemonsData } from '../../../../store/pokemons';
 import { getChosenPokemonsAsync} from '../../../../store/chosenPokemons';
 
 const StartPage = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const pokemonsRedux = useSelector(selectPokemonsData);
+    
     const [pokemons, setPokemons] = useState({});
+    const [chosenPokemons, setChosenPokemons] = useState({});
+    const pokemonsRedux = useSelector(selectPokemonsData);
 
     useEffect(() => {
         dispatch(getPokemonsAsync());//send pokes to redux
@@ -22,7 +23,6 @@ const StartPage = () => {
         setPokemons(pokemonsRedux);
     }, [pokemonsRedux]);//set Pokemons on change of pokemonsRedux
     
-    const [chosenPokemons, setChosenPokemons] = useState({});
     const onClickPokemon = (key) => {
         const pokemon = { ...pokemons[key] };
 
