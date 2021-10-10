@@ -11,6 +11,7 @@ import PlayerBoard from './PlayerBoard';
 import { selectChosenPokemonsData } from '../../../../store/chosenPokemons';
 import { getPlayer2CardsAsync } from '../../../../store/player2Cards';
 import request from '../../../../service/request';
+import { selectPokemonsData } from '../../../../store/pokemons';
 
 const getRandomPlayer = () => {
     return (Math.random() > 0.5) ? 1 : 2;
@@ -35,10 +36,12 @@ const BoardPage = () => {
     const dispatch = useDispatch()
     const { setWin } = useContext(PokemonContext);
     const chosenCards = useSelector(selectChosenPokemonsData);
+    const allCards = useSelector(selectPokemonsData);
 
     const [board, setBoard] = useState([]);
     const [steps, setSteps] = useState(0);
     const [turn, setTurn] = useState()
+    const [aiFirstTurn, setAiFirstTurn] = useState(false)
     const [choiceCard, setChoiceCard] = useState(null);
     const [result, setResult] = useState();
     const [show, setShow] = useState(false);
@@ -79,7 +82,7 @@ const BoardPage = () => {
             setBoard(boardRequest.data)
 
             const player2Request = await request.gameStart({
-                pokemons: Object.values(chosenCards)
+                pokemons: Object.values(allCards)
             });//send all player 1 cards to receive set of player 2 cards from request
 
             setPlayer2(player2Request.data.map(item => ({
@@ -91,97 +94,98 @@ const BoardPage = () => {
                 ...item,
                 possession: 'red',
             }))))//send player 2 to redux
-
             setTimeout(() => {
-                const playerX = getRandomPlayer();
-                setTurn(playerX);
+                const randomTurn = getRandomPlayer();
+                setTurn(randomTurn);
+                if (randomTurn === 2) {
+                    setAiFirstTurn(true);
+                }
             }, 2000);//set random turn on delay
-
         }
         fetchData();
         // eslint-disable-next-line
     }, [])
 
     useEffect(() => {
-        const fetchData = async () => {
-            const boardRequest = await request.getBoard();
+        if (aiFirstTurn) {// 1 turn of AI, if first turn
+            const Aiturn = async () => {
+                const params = {
+                    currentPlayer: 'p2',
+                    hands: {
+                        p1: player1,
+                        p2: player2
+                    },
+                    move: null,
+                    board: serverBoard,
+                };
+                if (player2.length === 5) {
+                    const game = await request.game(params);
+                    const idAi = game.move.poke.id;
 
-            setBoard(boardRequest.data)
+                    setTimeout(() => {
+                        setPlayer2(prevState => prevState.map(item => {
+                            if (item.id === idAi) {
+                                return {
+                                    ...item,
+                                    selected: true,
+                                }
+                            }
+                            return item;
 
-            const player2Request = await request.gameStart({
-                pokemons: Object.values(chosenCards)
-            });//send all player 1 cards to receive set of player 2 cards from request
-
-            setPlayer2(player2Request.data.map(item => ({
-                ...item,
-                possession: 'red',
-            })))//sets player 2 cards to board
-
-            dispatch(getPlayer2CardsAsync(player2Request.data.map(item => ({
-                ...item,
-                possession: 'red',
-            }))))//send player 2 to redux
-
-            // setTimeout(() => {
-            //     const playerX = getRandomPlayer();
-            //     setTurn(playerX);
-
-            //     if (playerX === 2) {
-            //         const turn = async () => {
-            //             const params = {
-            //                 currentPlayer: 'p2',
-            //                 hands: {
-            //                     p1: player1,
-            //                     p2: player2
-            //                 },
-            //                 move: null,
-            //                 board: serverBoard,
-            //             };
-            //             const game = await request.game(params);
-            //             console.log(game)
-            //             const idAi = game.move.poke.id;
-
-            //             setTimeout(() => {
-            //                 setPlayer2(prevState => prevState.map(item => {
-            //                     if (item.id === idAi) {
-            //                         return {
-            //                             ...item,
-            //                             selected: true,
-            //                         }
-            //                     }
-            //                     return item;
-
-            //                 }));
-            //             }, 1000);
-            //             setTimeout(() => {
-            //                 setPlayer2(() => game.hands.p2.pokes.map(item => item.poke));
-            //                 setServerBoard(game.board);
-            //                 setBoard(returnBoard(game.board))
-            //                 setSteps(prevState => {
-            //                     const count = prevState + 1;
-            //                     return count;
-            //                 })//set AI steps
-            //                 setTurn((prevState) => prevState - 1);
-            //             }, 1500);
-            //         }
-            //         turn();
-            //     }
-            // }, 2000);//set random turn on delay
-
+                        }));
+                    }, 1000);
+                    setTimeout(() => {
+                        setPlayer2(() => game.hands.p2.pokes.map(item => item.poke));
+                        setServerBoard(game.board);
+                        setBoard(returnBoard(game.board))
+                        setSteps(prevState => {
+                            const count = prevState + 1;
+                            return count;
+                        })//set AI steps
+                        setTurn((prevState) => prevState - 1);
+                    }, 1500);
+                }
+            }
+            Aiturn();
         }
-        fetchData();
         // eslint-disable-next-line
-    }, [])
+    }, [aiFirstTurn])
 
     const onClickBoardCell = async (position) => {
         const isDublicate = board.some(({ card }) => {
+            console.log(card)
+            console.log(board)
+            console.log(choiceCard)
             return (
-                card?.id === choiceCard?.id &&
-                card?.id === choiceCard?.id
+                card?.id === choiceCard?.id 
+                // &&
+                // card?.id === choiceCard?.id
             );
         });
         if (isDublicate) return;
-        if (choiceCard) {
+
+        if (choiceCard) {// click on board after choosing card
+
+            if (choiceCard.player === 1) {
+                setPlayer1(prevState => (prevState.filter(item => item.id !== choiceCard.id)))
+                setTurn((prevState) => prevState + 1);
+            }//filter array, return array without choice.id card
+            // if (choiceCard.player === 2) {
+            //     setPlayer2(prevState => (prevState.filter(item => item.id !== choiceCard.id)))
+            //     setTurn((prevState) => prevState - 1);
+            // }
+            // player 2 move, disabled 
+
+            setBoard(prevState => prevState.map(item => {
+                if (item.position === position) {
+                    return {
+                        ...item,
+                        card: choiceCard,
+                    }
+                }
+                return item;
+            }))
+
             const params = {
                 currentPlayer: 'p1',
                 hands: {
@@ -196,26 +200,6 @@ const BoardPage = () => {
                 },
                 board: serverBoard,
             };
-
-            if (choiceCard.player === 1) {
-                setPlayer1(prevState => (prevState.filter(item => item.id !== choiceCard.id)))
-                setTurn((prevState) => prevState + 1);
-            }
-            if (choiceCard.player === 2) {
-                setPlayer2(prevState => (prevState.filter(item => item.id !== choiceCard.id)))
-                setTurn((prevState) => prevState - 1);
-            }//filter array, return array without choice.id card
-
-            setBoard(prevState => prevState.map(item => {
-                if (item.position === position) {
-                    return {
-                        ...item,
-                        card: choiceCard,
-                    }
-                }
-                return item;
-            }))
-
             const game = await request.game(params);
 
             setBoard(returnBoard(game.oldBoard));
@@ -227,7 +211,7 @@ const BoardPage = () => {
             if (game.move !== null) {
                 const idAi = game.move.poke.id;
 
-                setTimeout(() => {
+                setTimeout(() => {//ai moves
                     setPlayer2(prevState => prevState.map(item => {
                         if (item.id === idAi) {
                             return {

@@ -34,7 +34,6 @@ const NavBar = ({ onClickMenu, onClickLogin, isOpened, bgActive = false }) => {
                     )}
                     {(!isUserLoading && localId) && (
                         <Link className={s.loginWrapper}
-                            // onClick={onClickLogin}
                             to="/user"
                         >
                             <UserSVG />
