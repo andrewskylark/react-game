@@ -10,7 +10,7 @@
 * React router, Link and Switch
 * signing in and login in with Firebase
 
-### Deployed project: `[react-js-game.netlify.app](react-js-game.netlify.app)`
+### Deployed project: [react-js-game.netlify.app](react-js-game.netlify.app)
 
 ## Available Scripts
 
