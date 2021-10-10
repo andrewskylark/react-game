@@ -9,8 +9,8 @@ const HomePage = () => {
   return (
     <>
       <Header
-        title="This is title"
-        descr="This is Description!"
+        title="Pokemon Card game"
+        descr="Log in and hit Start button!"
       />
       <Layout
         title="This is title"

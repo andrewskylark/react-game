@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { PokemonContext } from '../../../../context/pokemonContext';
 
 import s from './style.module.css';
@@ -11,10 +11,12 @@ import { selectChosenPokemonsData } from '../../../../store/chosenPokemons';
 import { selectPlayer2CardsData } from '../../../../store/player2Cards';
 import FirebaseClass from '../../../../service/firebase';
 import { selectUserLocalID } from '../../../../store/user';
+import { getPokemonsAsync } from '../../../../store/pokemons';
 
 const FinishPage = () => {
     const { win } = useContext(PokemonContext);
     const history = useHistory();
+    const dispatch = useDispatch();
     const player1Cards = useSelector(selectChosenPokemonsData);
     const player2Cards = useSelector(selectPlayer2CardsData)
     const [chosenCard, setChosenCard] = useState({})
@@ -37,7 +39,8 @@ const FinishPage = () => {
     const onClickEndGame = () => {
         if (win === true) {
             if (Object.keys(chosenCard).length > 0) {
-                FirebaseClass.addPokemon(chosenCard, userID)
+                FirebaseClass.addPokemon(chosenCard, userID);
+                dispatch(getPokemonsAsync());
                 history.replace('/game');
             } else if (Object.keys(chosenCard).length === 0) {
                 alert('CHOOSE CARD!')
