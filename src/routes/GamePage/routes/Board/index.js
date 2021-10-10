@@ -50,6 +50,7 @@ const BoardPage = () => {
         return Object.values(chosenCards).map(item => ({
             ...item,
             possession: 'blue',
+            player: 1,
         }))//takes all poke values from redux, sets posesion property
     });
     const [serverBoard, setServerBoard] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0])
@@ -88,6 +89,7 @@ const BoardPage = () => {
             setPlayer2(player2Request.data.map(item => ({
                 ...item,
                 possession: 'red',
+                player: 2,
             })))//sets player 2 cards to board
 
             dispatch(getPlayer2CardsAsync(player2Request.data.map(item => ({
@@ -153,13 +155,9 @@ const BoardPage = () => {
 
     const onClickBoardCell = async (position) => {
         const isDublicate = board.some(({ card }) => {
-            console.log(card)
-            console.log(board)
-            console.log(choiceCard)
             return (
-                card?.id === choiceCard?.id 
-                // &&
-                // card?.id === choiceCard?.id
+                card?.id === choiceCard?.id &&
+                card?.player === choiceCard?.player
             );
         });
         if (isDublicate) return;

@@ -2,14 +2,14 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    translateY: -50%;
     margin: -60px 0 0 -60px;
     width: 0;
     height: 0;
     /* Triangle Borders */
+    opacity: 0.6;
     border-top: 60px solid transparent;
     border-bottom: 60px solid transparent;
-    border-left: 100px solid yellow;
+    border-left: 100px solid tomato;
     animation: spin 1s linear infinite;
 }
 
