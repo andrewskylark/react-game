@@ -12,7 +12,7 @@ const MenuHeader = ({ bgActive }) => {
     const dispatch = useDispatch();
 
     const [isOpened, setOpened] = useState(false);
-    const [isOpenedModal, setOpenedModal] = useState(false);
+    const [isOpenedModal, setOpenedModal] = useState(true);
     const SIGN_UP_POST = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyB5F8VIr6hcBgKoQAN6yWJ-c145EiJmZdA';
     const SIGN_IN_POST = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyB5F8VIr6hcBgKoQAN6yWJ-c145EiJmZdA';
     
