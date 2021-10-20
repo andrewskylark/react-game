@@ -30,9 +30,10 @@ export const slice = createSlice ({
 export const {fetchPokemons, fetchPokemonsResolve, fetchPokemonsReject} = slice.actions;
 export const getPokemonsAsync = () => async (dispatch, getState) => {
     const localId = selectUserLocalID(getState());
+    const idToken = localStorage.getItem('idToken');
     dispatch(fetchPokemons());//to know dispatch is set
     
-    const data = await fetch(`https://react-game-1c6e1-default-rtdb.firebaseio.com/${localId}/pokemons.json`).then(res => res.json());
+    const data = await fetch(`https://react-game-1c6e1-default-rtdb.firebaseio.com/${localId}/pokemons.json?auth=${idToken}`).then(res => res.json());
     dispatch(fetchPokemonsResolve(data));
 }
 export const selectPokemonsLoading = state => state.pokemons.isLoading;
