@@ -10,7 +10,6 @@ import PlayerBoard from '../Board/PlayerBoard';
 import { selectChosenPokemonsData } from '../../../../store/chosenPokemons';
 import { selectPlayer2CardsData } from '../../../../store/player2Cards';
 import FirebaseClass from '../../../../service/firebase';
-import { selectUserLocalID } from '../../../../store/user';
 import { getPokemonsAsync } from '../../../../store/pokemons';
 
 const FinishPage = () => {
@@ -20,7 +19,6 @@ const FinishPage = () => {
     const player1Cards = useSelector(selectChosenPokemonsData);
     const player2Cards = useSelector(selectPlayer2CardsData)
     const [chosenCard, setChosenCard] = useState({})
-    const userID = useSelector(selectUserLocalID);
     
     let endGameMsg = '';
     let turn = ''
@@ -39,7 +37,7 @@ const FinishPage = () => {
     const onClickEndGame = () => {
         if (win === true) {
             if (Object.keys(chosenCard).length > 0) {
-                FirebaseClass.addPokemon(chosenCard, userID);
+                FirebaseClass.addPokemonAuth(chosenCard);
                 dispatch(getPokemonsAsync());
                 history.replace('/game');
             } else if (Object.keys(chosenCard).length === 0) {

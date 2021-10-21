@@ -7,6 +7,7 @@ import Modal from '../modal';
 import LoginForm from '../loginForm';
 import { useDispatch } from "react-redux";
 import { getUserUpdateAsync } from "../../store/user";
+import FirebaseClass from "../../service/firebase";
 
 const MenuHeader = ({ bgActive }) => {
     const dispatch = useDispatch();
@@ -60,6 +61,7 @@ const MenuHeader = ({ bgActive }) => {
             NotificationManager.success(
                 register ? 'Registered succesfully!' : 'Signed in, welcome back!'
             );
+            FirebaseClass.setLocalID(responce.localId);
         }
     }
     
